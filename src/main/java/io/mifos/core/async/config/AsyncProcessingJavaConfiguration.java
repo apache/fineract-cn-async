@@ -24,6 +24,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.scheduling.annotation.AsyncConfigurer;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.security.task.DelegatingSecurityContextAsyncTaskExecutor;
 
 import java.util.concurrent.Executor;
 
@@ -52,7 +53,7 @@ public class AsyncProcessingJavaConfiguration
     executor.setThreadNamePrefix(
         this.env.getProperty(AsyncConstants.THREAD_NAME_PROP, AsyncConstants.THREAD_NAME_DEFAULT));
     executor.initialize();
-    return executor;
+    return new DelegatingSecurityContextAsyncTaskExecutor(executor);
   }
 
   @Override

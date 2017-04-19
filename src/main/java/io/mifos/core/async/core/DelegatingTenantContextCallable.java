@@ -9,6 +9,11 @@ public class DelegatingTenantContextCallable<V> implements Callable<V> {
   private final Callable<V> delegate;
   private final String tenantIdentifier;
 
+  DelegatingTenantContextCallable(Callable<V> delegate) {
+    this.delegate = delegate;
+    this.tenantIdentifier = null;
+  }
+
   DelegatingTenantContextCallable(final Callable<V> delegate, final String tenantIdentifier) {
     super();
     this.delegate = delegate;
@@ -19,7 +24,9 @@ public class DelegatingTenantContextCallable<V> implements Callable<V> {
   public V call() throws Exception {
     try {
       TenantContextHolder.clear();
-      TenantContextHolder.setIdentifier(this.tenantIdentifier);
+      if(this.tenantIdentifier != null) {
+        TenantContextHolder.setIdentifier(this.tenantIdentifier);
+      }
       return this.delegate.call();
     } finally {
       TenantContextHolder.clear();

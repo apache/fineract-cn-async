@@ -15,6 +15,7 @@
  */
 package io.mifos.core.async.config;
 
+import io.mifos.core.async.core.DelegatingTenantContextExecutor;
 import io.mifos.core.async.util.AsyncConstants;
 import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
 import org.springframework.aop.interceptor.SimpleAsyncUncaughtExceptionHandler;
@@ -53,7 +54,8 @@ public class AsyncProcessingJavaConfiguration
     executor.setThreadNamePrefix(
         this.env.getProperty(AsyncConstants.THREAD_NAME_PROP, AsyncConstants.THREAD_NAME_DEFAULT));
     executor.initialize();
-    return new DelegatingSecurityContextAsyncTaskExecutor(executor);
+
+    return new DelegatingTenantContextExecutor(new DelegatingSecurityContextAsyncTaskExecutor(executor));
   }
 
   @Override

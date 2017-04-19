@@ -41,10 +41,16 @@ public class DelegatingTenantContextExecutor implements AsyncTaskExecutor {
   }
 
   private Runnable wrap(final Runnable task) {
-    return new DelegatingTenantContextRunnable(task, TenantContextHolder.checkedGetIdentifier());
+    if(TenantContextHolder.identifier().isPresent()) {
+      return new DelegatingTenantContextRunnable(task, TenantContextHolder.checkedGetIdentifier());
+    }
+    return new DelegatingTenantContextRunnable(task);
   }
 
   private <T> Callable<T> wrap(final Callable<T> task) {
-    return new DelegatingTenantContextCallable<>(task, TenantContextHolder.checkedGetIdentifier());
+    if(TenantContextHolder.identifier().isPresent()) {
+      return new DelegatingTenantContextCallable<>(task, TenantContextHolder.checkedGetIdentifier());
+    }
+    return new DelegatingTenantContextCallable<>(task);
   }
 }

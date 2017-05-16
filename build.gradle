@@ -52,6 +52,10 @@ dependencies {
     )
 }
 
+jar {
+    from sourceSets.main.allSource
+}
+
 publishing {
     publications {
         asyncPublication(MavenPublication) {

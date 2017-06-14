@@ -16,6 +16,7 @@ version '0.1.0-BUILD-SNAPSHOT'
 
 ext.versions = [
         frameworklang        : '0.1.0-BUILD-SNAPSHOT',
+        frameworkapi         : '0.1.0-BUILD-SNAPSHOT',
         springcontext        : '4.3.3.RELEASE',
         springsecurity       : '4.2.2.RELEASE',
         springboot           : '1.4.1.RELEASE',
@@ -42,6 +43,7 @@ repositories {
 dependencies {
     compile(
             [group: 'io.mifos.core', name: 'lang', version: versions.frameworklang],
+            [group: 'io.mifos.core', name: 'api', version: versions.frameworkapi],
             [group: 'org.springframework', name: 'spring-context', version: versions.springcontext],
             [group: 'org.springframework.security', name: 'spring-security-web', version: versions.springsecurity],
             [group: 'com.google.code.findbugs', name: 'jsr305', version: versions.findbugs]

@@ -1,5 +1,6 @@
 package io.mifos.core.async.core;
 
+import io.mifos.core.api.util.UserContextHolder;
 import io.mifos.core.lang.TenantContextHolder;
 import org.springframework.core.task.AsyncTaskExecutor;
 import org.springframework.security.task.DelegatingSecurityContextAsyncTaskExecutor;
@@ -7,11 +8,11 @@ import org.springframework.security.task.DelegatingSecurityContextAsyncTaskExecu
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 
-public class DelegatingTenantContextExecutor implements AsyncTaskExecutor {
+public class DelegatingContextExecutor implements AsyncTaskExecutor {
 
   private final DelegatingSecurityContextAsyncTaskExecutor delegate;
 
-  public DelegatingTenantContextExecutor(final DelegatingSecurityContextAsyncTaskExecutor delegate) {
+  public DelegatingContextExecutor(final DelegatingSecurityContextAsyncTaskExecutor delegate) {
     super();
     this.delegate = delegate;
   }
@@ -41,16 +42,20 @@ public class DelegatingTenantContextExecutor implements AsyncTaskExecutor {
   }
 
   private Runnable wrap(final Runnable task) {
-    if(TenantContextHolder.identifier().isPresent()) {
-      return new DelegatingTenantContextRunnable(task, TenantContextHolder.checkedGetIdentifier());
+    if(TenantContextHolder.identifier().isPresent()
+        || UserContextHolder.getUserContext().isPresent()) {
+      return new DelegatingContextRunnable(task, TenantContextHolder.checkedGetIdentifier(),
+          UserContextHolder.getUserContext().get());
     }
-    return new DelegatingTenantContextRunnable(task);
+    return new DelegatingContextRunnable(task);
   }
 
   private <T> Callable<T> wrap(final Callable<T> task) {
-    if(TenantContextHolder.identifier().isPresent()) {
-      return new DelegatingTenantContextCallable<>(task, TenantContextHolder.checkedGetIdentifier());
+    if(TenantContextHolder.identifier().isPresent()
+        || UserContextHolder.getUserContext().isPresent()) {
+      return new DelegatingContextCallable<>(task, TenantContextHolder.checkedGetIdentifier(),
+          UserContextHolder.getUserContext().get());
     }
-    return new DelegatingTenantContextCallable<>(task);
+    return new DelegatingContextCallable<>(task);
   }
 }

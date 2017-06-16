@@ -4,41 +4,36 @@ import io.mifos.core.api.util.UserContext;
 import io.mifos.core.api.util.UserContextHolder;
 import io.mifos.core.lang.TenantContextHolder;
 
+import java.util.Optional;
+
+@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 public class DelegatingContextRunnable implements Runnable {
 
   private final Runnable delegate;
-  private final String tenantIdentifier;
-  private final UserContext userContext;
-
-  DelegatingContextRunnable(final Runnable delegate) {
-    this.delegate = delegate;
-    this.tenantIdentifier = null;
-    this.userContext = null;
-  }
+  private final Optional<String> optionalTenantIdentifier;
+  private final Optional<UserContext> optionalUserContext;
 
   DelegatingContextRunnable(final Runnable delegate, final String tenantIdentifier,
                             final UserContext userContext) {
     super();
     this.delegate = delegate;
-    this.tenantIdentifier = tenantIdentifier;
-    this.userContext = userContext;
+    this.optionalTenantIdentifier = Optional.ofNullable(tenantIdentifier);
+    this.optionalUserContext = Optional.ofNullable(userContext);
   }
 
   @Override
   public void run() {
     try {
       TenantContextHolder.clear();
-      if(this.tenantIdentifier != null) {
-        TenantContextHolder.setIdentifier(this.tenantIdentifier);
-      }
+      optionalTenantIdentifier.ifPresent(TenantContextHolder::setIdentifier);
+
       UserContextHolder.clear();
-      if (this.userContext != null) {
-        UserContextHolder.setUserContext(this.userContext);
-      }
+      optionalUserContext.ifPresent(UserContextHolder::setUserContext);
+
       this.delegate.run();
     } finally {
       TenantContextHolder.clear();
-      UserContextHolder.clear();;
+      UserContextHolder.clear();
     }
   }
 }

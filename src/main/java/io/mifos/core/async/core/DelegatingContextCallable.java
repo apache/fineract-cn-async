@@ -4,39 +4,33 @@ import io.mifos.core.api.util.UserContext;
 import io.mifos.core.api.util.UserContextHolder;
 import io.mifos.core.lang.TenantContextHolder;
 
+import java.util.Optional;
 import java.util.concurrent.Callable;
 
+@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 public class DelegatingContextCallable<V> implements Callable<V> {
 
   private final Callable<V> delegate;
-  private final String tenantIdentifier;
-  private final UserContext userContext;
-
-  DelegatingContextCallable(Callable<V> delegate) {
-    this.delegate = delegate;
-    this.tenantIdentifier = null;
-    this.userContext = null;
-  }
+  private final Optional<String> optionalTenantIdentifier;
+  private final Optional<UserContext> optionalUserContext;
 
   DelegatingContextCallable(final Callable<V> delegate, final String tenantIdentifier,
                             final UserContext userContext) {
     super();
     this.delegate = delegate;
-    this.tenantIdentifier = tenantIdentifier;
-    this.userContext = userContext;
+    this.optionalTenantIdentifier = Optional.ofNullable(tenantIdentifier);
+    this.optionalUserContext = Optional.ofNullable(userContext);
   }
 
   @Override
   public V call() throws Exception {
     try {
       TenantContextHolder.clear();
-      if(this.tenantIdentifier != null) {
-        TenantContextHolder.setIdentifier(this.tenantIdentifier);
-      }
+      optionalTenantIdentifier.ifPresent(TenantContextHolder::setIdentifier);
+
       UserContextHolder.clear();
-      if (this.userContext != null) {
-        UserContextHolder.setUserContext(this.userContext);
-      }
+      optionalUserContext.ifPresent(UserContextHolder::setUserContext);
+
       return this.delegate.call();
     } finally {
       TenantContextHolder.clear();

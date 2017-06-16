@@ -1,5 +1,6 @@
 package io.mifos.core.async.core;
 
+import io.mifos.core.api.util.UserContext;
 import io.mifos.core.api.util.UserContextHolder;
 import io.mifos.core.lang.TenantContextHolder;
 import org.springframework.core.task.AsyncTaskExecutor;
@@ -42,20 +43,14 @@ public class DelegatingContextExecutor implements AsyncTaskExecutor {
   }
 
   private Runnable wrap(final Runnable task) {
-    if(TenantContextHolder.identifier().isPresent()
-        || UserContextHolder.getUserContext().isPresent()) {
-      return new DelegatingContextRunnable(task, TenantContextHolder.checkedGetIdentifier(),
-          UserContextHolder.getUserContext().get());
-    }
-    return new DelegatingContextRunnable(task);
+    final String tenantIdentifier = TenantContextHolder.identifier().orElse(null);
+    final UserContext userContext = UserContextHolder.getUserContext().orElse(null);
+    return new DelegatingContextRunnable(task, tenantIdentifier, userContext);
   }
 
   private <T> Callable<T> wrap(final Callable<T> task) {
-    if(TenantContextHolder.identifier().isPresent()
-        || UserContextHolder.getUserContext().isPresent()) {
-      return new DelegatingContextCallable<>(task, TenantContextHolder.checkedGetIdentifier(),
-          UserContextHolder.getUserContext().get());
-    }
-    return new DelegatingContextCallable<>(task);
+    final String tenantIdentifier = TenantContextHolder.identifier().orElse(null);
+    final UserContext userContext = UserContextHolder.getUserContext().orElse(null);
+    return new DelegatingContextCallable<>(task, tenantIdentifier, userContext);
   }
 }

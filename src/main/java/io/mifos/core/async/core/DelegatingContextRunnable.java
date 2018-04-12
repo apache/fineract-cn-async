@@ -18,11 +18,11 @@
  */
 package io.mifos.core.async.core;
 
-import io.mifos.core.api.util.UserContext;
-import io.mifos.core.api.util.UserContextHolder;
-import io.mifos.core.lang.TenantContextHolder;
 
 import java.util.Optional;
+import org.apache.fineract.cn.api.util.UserContext;
+import org.apache.fineract.cn.api.util.UserContextHolder;
+import org.apache.fineract.cn.lang.TenantContextHolder;
 
 @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 public class DelegatingContextRunnable implements Runnable {

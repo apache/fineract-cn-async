@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package io.mifos.core.async.config;
+package org.apache.fineract.cn.async.config;
 
 import org.springframework.context.annotation.Import;
 

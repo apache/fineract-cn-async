@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package io.mifos.core.async.util;
+package org.apache.fineract.cn.async.util;
 
 public interface AsyncConstants {
 

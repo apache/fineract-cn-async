@@ -16,10 +16,10 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package io.mifos.core.async.config;
+package org.apache.fineract.cn.async.config;
 
-import io.mifos.core.async.core.DelegatingContextExecutor;
-import io.mifos.core.async.util.AsyncConstants;
+import org.apache.fineract.cn.async.core.DelegatingContextExecutor;
+import org.apache.fineract.cn.async.util.AsyncConstants;
 import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
 import org.springframework.aop.interceptor.SimpleAsyncUncaughtExceptionHandler;
 import org.springframework.beans.factory.annotation.Autowired;

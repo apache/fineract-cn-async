@@ -16,22 +16,23 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package io.mifos.core.async.core;
+package org.apache.fineract.cn.async.core;
 
-import io.mifos.core.api.util.UserContext;
-import io.mifos.core.api.util.UserContextHolder;
-import io.mifos.core.lang.TenantContextHolder;
 
 import java.util.Optional;
+import java.util.concurrent.Callable;
+import org.apache.fineract.cn.api.util.UserContext;
+import org.apache.fineract.cn.api.util.UserContextHolder;
+import org.apache.fineract.cn.lang.TenantContextHolder;
 
 @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
-public class DelegatingContextRunnable implements Runnable {
+public class DelegatingContextCallable<V> implements Callable<V> {
 
-  private final Runnable delegate;
+  private final Callable<V> delegate;
   private final Optional<String> optionalTenantIdentifier;
   private final Optional<UserContext> optionalUserContext;
 
-  DelegatingContextRunnable(final Runnable delegate, final String tenantIdentifier,
+  DelegatingContextCallable(final Callable<V> delegate, final String tenantIdentifier,
                             final UserContext userContext) {
     super();
     this.delegate = delegate;
@@ -40,7 +41,7 @@ public class DelegatingContextRunnable implements Runnable {
   }
 
   @Override
-  public void run() {
+  public V call() throws Exception {
     try {
       TenantContextHolder.clear();
       optionalTenantIdentifier.ifPresent(TenantContextHolder::setIdentifier);
@@ -48,7 +49,7 @@ public class DelegatingContextRunnable implements Runnable {
       UserContextHolder.clear();
       optionalUserContext.ifPresent(UserContextHolder::setUserContext);
 
-      this.delegate.run();
+      return this.delegate.call();
     } finally {
       TenantContextHolder.clear();
       UserContextHolder.clear();

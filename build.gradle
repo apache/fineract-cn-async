@@ -34,12 +34,12 @@ group 'org.apache.fineract.cn'
 version '0.1.0-BUILD-SNAPSHOT'
 
 ext.versions = [
-        frameworklang        : '0.1.0-BUILD-SNAPSHOT',
-        frameworkapi         : '0.1.0-BUILD-SNAPSHOT',
-        springcontext        : '4.3.3.RELEASE',
-        springsecurity       : '4.2.2.RELEASE',
-        springboot           : '1.4.1.RELEASE',
-        findbugs             : '3.0.1',
+        frameworklang : '0.1.0-BUILD-SNAPSHOT',
+        frameworkapi  : '0.1.0-BUILD-SNAPSHOT',
+        springcontext : '4.3.3.RELEASE',
+        springsecurity: '4.2.2.RELEASE',
+        springboot    : '1.4.1.RELEASE',
+        findbugs      : '3.0.1',
 ]
 
 apply plugin: 'java'
@@ -99,11 +99,11 @@ artifactory {
         }
 
         defaults {
-            publications ('asyncPublication')
+            publications('asyncPublication')
         }
     }
 }
-artifactoryPublish.dependsOn('clean','publishToMavenLocal')
+artifactoryPublish.dependsOn('clean', 'publishToMavenLocal')
 
 license {
     header rootProject.file('HEADER')
@@ -115,6 +115,6 @@ license {
 
 rat {
     // List of exclude directives, defaults to ['**/.gradle/**']
-    excludes = [ ".idea/**", ".gradle/**", "gradle/**", "build/**", "gradlew", "gradlew.bat", "README.md" ]
-
+    excludes = [".idea/**", ".gradle/**", "gradle/**", "build/**", "gradlew", "gradlew.bat", "README.md"]
+    plainOutput = true
 }

@@ -20,7 +20,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'io.spring.gradle:dependency-management-plugin:0.6.1.RELEASE'
+        classpath 'io.spring.gradle:dependency-management-plugin:1.0.8.RELEASE'
     }
 }
 
@@ -44,8 +44,6 @@ ext.versions = [
         springboot    : '1.4.1.RELEASE',
         findbugs      : '3.0.1',
 ]
-
-apply plugin: 'io.spring.dependency-management'
 
 tasks.withType(JavaCompile) {
     sourceCompatibility = JavaVersion.VERSION_1_8

@@ -34,11 +34,11 @@ plugins {
 }
 
 group 'org.apache.fineract.cn'
-version '0.1.0-BUILD-SNAPSHOT'
+version 'spring_boot_2-SNAPSHOT'
 
 ext.versions = [
-        frameworklang : '0.1.0-BUILD-SNAPSHOT',
-        frameworkapi  : '0.1.0-BUILD-SNAPSHOT',
+        frameworklang : 'spring_boot_2-SNAPSHOT',
+        frameworkapi  : 'spring_boot_2-SNAPSHOT',
         springcontext : '4.3.3.RELEASE',
         springsecurity: '4.2.2.RELEASE',
         springboot    : '1.4.1.RELEASE',
